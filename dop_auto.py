@@ -53,7 +53,6 @@ time.sleep(2)
 
 browser.save_screenshot('screenshot.png')
 image = cv2.imread('screenshot.png')
-cv2.imshow('original', image)
 cropped_image = image[310:340, 1250:1400]
 cv2.imwrite("Cropped Image.jpg", cropped_image)
 cv2.waitKey(0)

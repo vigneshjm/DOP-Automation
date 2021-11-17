@@ -51,10 +51,13 @@ pwd=browser.find_element_by_id("AuthenticationFG.ACCESS_CODE")
 pwd.send_keys(password)
 time.sleep(2)
 
-browser.save_screenshot('browser_shot.png')
-img = browser.find_element_by_id('IMAGECAPTCHA')
-loc = img.location
-image = cv.
+browser.save_screenshot('screenshot.png')
+image = cv2.imread('screenshot.png')
+cv2.imshow('original', image)
+cropped_image = image[310:340, 1250:1400]
+cv2.imwrite("Cropped Image.jpg", cropped_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 browser.find_element_by_id('VALIDATE_RM_PLUS_CREDENTIALS_CATCHA_DISABLED').click()
 time.sleep(3)

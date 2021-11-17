@@ -6,14 +6,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import csv
+import cv2
 
 browser=webdriver.Chrome()
 browser.maximize_window()
 
 username='DOP.MIG0017258'
 password='Smatheswaran@73'
+
 total = 10
-with open ('\\Users\\vignesh\\Desktop\\PYTHON\\accounts.txt','r') as file:
+with open ('\\Users\\HP\\Desktop\\Git Repo\\DOP Automation\\accounts.txt','r') as file:
   list = file.readlines()
 
 mul_list = []
@@ -29,7 +31,7 @@ for i in list:
 
 acc = acc[:-1]
 acc_ass ={}
-with open('\\Users\\vignesh\\Desktop\\PYTHON\\account_asslass.csv','r') as csv_file:
+with open('\\Users\\HP\\Desktop\\Git Repo\\DOP Automation\\account_asslass.csv','r') as csv_file:
   for row in csv_file:
     li = row.split(',')
     account = li[0].replace('\n','')
@@ -48,6 +50,11 @@ time.sleep(2)
 pwd=browser.find_element_by_id("AuthenticationFG.ACCESS_CODE")
 pwd.send_keys(password)
 time.sleep(2)
+
+browser.save_screenshot('browser_shot.png')
+img = browser.find_element_by_id('IMAGECAPTCHA')
+loc = img.location
+image = cv.
 
 browser.find_element_by_id('VALIDATE_RM_PLUS_CREDENTIALS_CATCHA_DISABLED').click()
 time.sleep(3)

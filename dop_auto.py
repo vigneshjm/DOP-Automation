@@ -5,7 +5,10 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from google.cloud import vision
+import os
 import csv
+import io
 import cv2
 
 browser=webdriver.Chrome()
@@ -13,6 +16,8 @@ browser.maximize_window()
 
 username='DOP.MIG0017258'
 password='Smatheswaran@73'
+credential_path = "\\Users\\HP\\Downloads\\dopautom-9f2f1a082393.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 total = 10
 with open ('\\Users\\HP\\Desktop\\Git Repo\\DOP Automation\\accounts.txt','r') as file:
@@ -57,6 +62,30 @@ cropped_image = image[310:340, 1250:1400]
 cv2.imwrite("Cropped Image.jpg", cropped_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+def detect_text(path):
+    """Detects text in the file."""
+    client = vision.ImageAnnotatorClient()
+
+    with io.open(path, 'rb') as image_file:
+        content = image_file.read()
+
+    image = vision.Image(content=content)
+
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+    print('Texts:{}'.format(texts[0].description))
+    return texts[0].description
+
+    if response.error.message:
+        raise Exception(
+            '{}\nFor more info on error messages, check: '
+            'https://cloud.google.com/apis/design/errors'.format(
+                response.error.message))
+
+captcha=browser.find_element_by_id("AuthenticationFG.VERIFICATION_CODE")
+captcha.send_keys(str(detect_text('\\Users\\HP\\Desktop\\Git Repo\\DOP Automation\\Cropped Image.jpg')).strip('\n'))
+time.sleep(7)
 
 browser.find_element_by_id('VALIDATE_RM_PLUS_CREDENTIALS_CATCHA_DISABLED').click()
 time.sleep(3)

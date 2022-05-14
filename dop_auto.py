@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from google.cloud import vision
+from docx import Document
 import os
 import csv
 import io
@@ -92,15 +93,21 @@ time.sleep(3)
 
 browser.find_element_by_id('Accounts').click()
 browser.find_element_by_id('Agent Enquire & Update Screen').click()
-
-row_len = len(browser.find_elements_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr'))
-print(row_len)
 col_len = len(browser.find_elements_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr'))
 print(col_len)
 
+no_of_pgs=int(browser.find_element_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/p/span/span[1]').text.split()[3])
 accounts=[]
-account_row=[]
-for i in range(3,row_len):  
-  for j in range(2,6):
-    account_row.append(browser.find_element_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr['+str(i)+']/td['+str(j)+']').text)
-    print(account_row)
+for i in range(no_of_pgs):
+  accounts_page=[]
+  row_len = len(browser.find_elements_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr'))
+  for i in range(3,row_len):
+    for j in range(2,6+1):
+      accounts_page.append(browser.find_element_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr['+str(i)+']/td['+str(j)+']').text)
+  accounts.append(accounts_page)
+  try:
+    browser.find_element_by_id('Action.AgentRDActSummaryAllListing.GOTO_NEXT__').click()
+  except:
+    pass
+
+print(accounts)

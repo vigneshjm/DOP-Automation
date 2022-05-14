@@ -15,7 +15,7 @@ browser=webdriver.Chrome()
 browser.maximize_window()
 
 username='DOP.MIG0017258'
-password='Jamuna@73'
+password='Jamuna@73123'
 credential_path = "\\Users\\HP\\Downloads\\dopautom-9f2f1a082393.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
@@ -58,7 +58,7 @@ time.sleep(2)
 
 browser.save_screenshot('screenshot.png')
 image = cv2.imread('screenshot.png')
-cropped_image = image[310:340, 1250:1400]
+cropped_image = image[330:360, 1250:1400]
 cv2.imwrite("Cropped Image.jpg", cropped_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
@@ -93,72 +93,14 @@ time.sleep(3)
 browser.find_element_by_id('Accounts').click()
 browser.find_element_by_id('Agent Enquire & Update Screen').click()
 
-browser.find_element_by_xpath('/html/body/form/div[1]/div[4]/div[3]/p[3]/span/span[2]/textarea').send_keys(acc)
+row_len = len(browser.find_elements_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr'))
+print(row_len)
+col_len = len(browser.find_elements_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr'))
+print(col_len)
 
-browser.find_element_by_id('Button3087042').click()
-
-if total <=10:
-  clickable = ''
-  for i in range(0,total):
-    clickable = 'CustomAgentRDAccountFG.SELECT_INDEX_ARRAY['+str(i)+']'
-    browser.find_element_by_id(clickable).click()
-    time.sleep(2)
-else:
-  clickable = ''
-  for i in range(0,10):
-    clickable = 'CustomAgentRDAccountFG.SELECT_INDEX_ARRAY['+str(i)+']'
-    browser.find_element_by_id(clickable).click()
-  browser.find_element_by_id('Action.AgentRDActSummaryAllListing.GOTO_NEXT__').click()
-  for i in range (10,total):
-    clickable = 'CustomAgentRDAccountFG.SELECT_INDEX_ARRAY['+str(i)+']'
-    browser.find_element_by_id(clickable).click()
-  
-browser.find_element_by_id('CustomAgentRDAccountFG.PAY_MODE_SELECTED_FOR_TRN').click()
-  
-browser.find_element_by_id('Button26553257').click()
-
-if total <= 10:
-  acc_1 = str(browser.find_element_by_id('HREF_CustomAgentRDAccountFG.ACCOUNT_NUMBER_ARRAY[0]').text)
-  browser.find_element_by_id('CustomAgentRDAccountFG.ASLAAS_NO').send_keys(str(acc_ass[acc_1]))
-  browser.find_element_by_id('Button11874602').click()
-  time.sleep(1)
-  for i in range(0,total-1):
-    time.sleep(1)
-    browser.find_element_by_xpath('/html/body/form/div[1]/div[4]/div[5]/div/div/div/div/div/div/div/table/tbody/tr'+'['+str(4+i)+']'+'/td[1]/input').click()
-    acc = str(browser.find_element_by_id('HREF_CustomAgentRDAccountFG.ACCOUNT_NUMBER_ARRAY['+str(i+1)+']').text)
-    browser.find_element_by_id('CustomAgentRDAccountFG.ASLAAS_NO').send_keys(str(acc_ass[acc]))
-    time.sleep(1)
-    browser.find_element_by_id('Button11874602').click()
-	
-else:
-  acc_1 = str(browser.find_element_by_id('HREF_CustomAgentRDAccountFG.ACCOUNT_NUMBER_ARRAY[0]').text)
-  browser.find_element_by_id('CustomAgentRDAccountFG.ASLAAS_NO').send_keys(str(acc_ass[acc_1]))
-  browser.find_element_by_id('Button11874602').click()
-  time.sleep(1)
-  for i in range(0,9):
-    time.sleep(1)
-    browser.find_element_by_xpath('/html/body/form/div[1]/div[4]/div[5]/div/div/div/div/div/div/div/table/tbody/tr'+'['+str(4+i)+']'+'/td[1]/input').click()
-    acc = str(browser.find_element_by_id('HREF_CustomAgentRDAccountFG.ACCOUNT_NUMBER_ARRAY['+str(i+1)+']').text)
-    browser.find_element_by_id('CustomAgentRDAccountFG.ASLAAS_NO').send_keys(str(acc_ass[acc]))
-    time.sleep(1)
-    browser.find_element_by_id('Button11874602').click()
-  browser.find_element_by_id('Action.SelectedAgentRDActSummaryListing.GOTO_NEXT__').click()
-  browser.find_element_by_id('CustomAgentRDAccountFG.SELECTED_INDEX').click()
-  acc = str(browser.find_element_by_id('HREF_CustomAgentRDAccountFG.ACCOUNT_NUMBER_ARRAY[10]').text)
-  browser.find_element_by_id('CustomAgentRDAccountFG.ASLAAS_NO').send_keys(str(acc_ass[acc]))
-  browser.find_element_by_id('Button11874602').click()
-  for i in range(11,total):
-    time.sleep(1)
-    browser.find_element_by_id('Action.SelectedAgentRDActSummaryListing.GOTO_NEXT__').click()
-    browser.find_element_by_xpath('//*[@value='+str(i)+']').click()
-    acc = str(browser.find_element_by_id('HREF_CustomAgentRDAccountFG.ACCOUNT_NUMBER_ARRAY['+str(i)+']').text)
-    browser.find_element_by_id('CustomAgentRDAccountFG.ASLAAS_NO').send_keys(str(acc_ass[acc]))
-    time.sleep(1)
-    browser.find_element_by_id('Button11874602').click()
-
-browser.find_element_by_id('PAY_ALL_SAVED_INSTALLMENTS').click()
-
-# /html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr[3]/td[1]/input
-# HREF_CustomAgentRDAccountFG.ACCOUNT_NUMBER_ARRAY[10]//*[@id="CustomAgentRDAccountFG.SELECTED_INDEX"]
-
-
+accounts=[]
+account_row=[]
+for i in range(3,row_len):  
+  for j in range(2,6):
+    account_row.append(browser.find_element_by_xpath('/html/body/form/div[1]/div[4]/div[4]/div/div/div/div/div/div/div/table/tbody/tr['+str(i)+']/td['+str(j)+']').text)
+    print(account_row)
